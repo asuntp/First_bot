@@ -24,7 +24,6 @@ def greet_user(bot, update):
 
 def talk_to_me(bot, update):
     user_text = 'Hello {}! You wrote: {}'.format(update.message.chat.username, update.message.text)
-    user_text = update.message.text
     #bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
     print(update.message)
     # эхобот ---отправляет пользователю тот текст который он написал
