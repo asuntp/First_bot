@@ -51,8 +51,7 @@ def talk_to_me(bot, update):
         user_text1 = 'В {} году расстояние между Землей и Ураном было (будет): {}'.format(ear, distance)
     else:
         update.message.reply_text("Введите правильное название небесного тела")
-
-    #print(update.message)
+    update.message.reply_text(user_text1)
 
     logging.info("User: %s, Chat id: %s, Message: %s", update.message.chat.username,
                  update.message.chat.id, update.message.text)
@@ -60,22 +59,36 @@ def talk_to_me(bot, update):
     update.message.reply_text(user_text1)
 
 
-def mars(bot, update):
-    update.message.reply_text('Введите год')
-    ear = update.message.text
-    distance = ephem.Mars(ear).earth_distance
-    user_text1 = 'В {} году расстояние между Землей и Марсом было: {}'.format(ear, distance)
-    update.message.reply_text(user_text1)
+def planet(bot, update):
+    user_text2 = update.message.text
+    user_text2 = user_text2.split()
+    planet1 = user_text2[1]
+    ear = (user_text2[2])
 
-    #data = {update.message.text: ephem.Mars(update.message.text).earth_distance}
-
-    #data = {'1900 a.c.': ephem.Mars(1900).earth_distance, '1910 a.c.': ephem.Mars(1910).earth_distance,
-    #        '1920 a.c.': ephem.Mars(1920).earth_distance, '1930 a.c.': ephem.Mars(1930).earth_distance,
-    #        '1940 a.c.': ephem.Mars(1940).earth_distance, '1950 a.c.': ephem.Mars(1950).earth_distance}
-    #update.message.reply_text({update.message.text: ephem.Mars(update.message.text).earth_distance})
-
-
-
+    if planet1 == 'Mars':
+        distance = ephem.Mars(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Марсом было (будет): {}'.format(ear, distance)
+    elif planet1 == 'Moon':
+        distance = ephem.Moon(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Луной было (будет): {}'.format(ear, distance)
+    elif planet1 == 'Jupiter':
+        distance = ephem.Jupiter(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Юпитером было (будет): {}'.format(ear, distance)
+    elif planet1 == 'Saturn':
+        distance = ephem.Saturn(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Сатурном было (будет): {}'.format(ear, distance)
+    elif planet1 == 'Venus':
+        distance = ephem.Venus(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Венерой было (будет): {}'.format(ear, distance)
+    elif planet1 == 'Mercury':
+        distance = ephem.Mercury(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Меркурием было (будет): {}'.format(ear, distance)
+    elif planet1 == 'Uranus':
+        distance = ephem.Uranus(ear).earth_distance
+        user_text2 = 'В {} году расстояние между Землей и Ураном было (будет): {}'.format(ear, distance)
+    else:
+        update.message.reply_text("Введите правильное название небесного тела")
+    update.message.reply_text(user_text2)
 
 def error(bot, update):
     logging.warning('Update "%s" caused error "%s"', bot, update.error)
@@ -87,7 +100,9 @@ def main():
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', greet_user)) #Когда придет команда start выполнится функция
+    dp.add_handler(CommandHandler('planet', planet)) #Когда придет команда start выполнится функция
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
+    dp.add_handler(MessageHandler(Filters.text, planet))
     dp.add_error_handler(error)
 
     updater.start_polling()
