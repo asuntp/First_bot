@@ -23,24 +23,26 @@ def greet_user(bot, update):
 
 
 def talk_to_me(bot, update):
-    #text = 'Привет {}, ты написал {}.'.format(update.message.username, update.message.text)
-    #update.message.reply_text(text)
-    user_text = update.message.text
-    user_text = user_text.split()
-    body = user_text[0]
-    ear = abs(int(user_text[1]))
-    planet_dict = {'Mars': 'Mars', 'Moon': 'Moon', 'Jupiter': 'Jupiter', 'Saturn': 'Saturn', 'Venus': 'Venus', 'Mercury': 'Mercury', 'Uranus': 'Uranus'}
-
-    if body in planet_dict:
-        temp_body = planet_dict.get(body)planet_dict.get(body)
-        print(temp_body)
-        distance = ephem.temp_body(ear).earth_distance
-        print(distance)
-        user_text1 = 'В {} году расстояние между Землей и {} было (будет): {}'.format(ear, planet, distance)
-        update.message.reply_text(user_text1)
-    else:
-        update.message.reply_text("Введите правильное название небесного тела")
+    text = 'Привет {}, ты написал {}.'.format(update.message.chat.username, update.message.text)
+    update.message.reply_text(text)
     print(update.message)
+    # user_text = update.message.text
+    # user_text = user_text.split()
+    # update.message.reply_text(user_text)
+    # body = user_text[0]
+    # ear = abs(int(user_text[1]))
+    # planet_dict = {'Mars': 'Mars', 'Moon': 'Moon', 'Jupiter': 'Jupiter', 'Saturn': 'Saturn', 'Venus': 'Venus', 'Mercury': 'Mercury', 'Uranus': 'Uranus'}
+    #
+    # if body in planet_dict:
+    #     temp_body = planet_dict.get(body)
+    #     print(temp_body)
+    #     distance = ephem.planet_dict[body](ear).earth_distance
+    #     print(distance)
+    #     user_text1 = 'В {} году расстояние между Землей и {} было (будет): {}'.format(ear, planet, distance)
+    #     update.message.reply_text(user_text1)
+    # else:
+    #     update.message.reply_text("Введите правильное название небесного тела")
+
 
     logging.info("User: %s, Chat id: %s, Message: %s", update.message.chat.username,
                  update.message.chat.id, update.message.text)
@@ -90,7 +92,7 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', greet_user)) #Когда придет команда start выполнится функция
     dp.add_handler(CommandHandler('planet', planet)) #Когда придет команда start выполнится функция
-    #dp.add_handler(MessageHandler(Filters.text, talk_to_me))
+    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     #dp.add_handler(MessageHandler(Filters.text, planet))
     #dp.add_error_handler(error)
 
