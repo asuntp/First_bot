@@ -15,7 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
 #Параметря принято называть bot & update (должно быть как минимум 2 параметра)
 def greet_user(bot, update):
     #text = 'Hello, you can rule some command and get answer, like distance from Earth and selectes planet on a input date: /Moon, /Mars, /Jupiter, /Saturn, /Venus, /Mercury, /Uranus '
-    text = 'Привет, ты можешь набрать команду состоящую из названия планеты и через пробел  год в котором ты хочешь получить расстояние между Землёй и заданным небесным телом. Названия планет: Mars, Jupiter, Saturn, Venus, Mercury, Uranus, Moon. Расстояние указывается в астрономических единицах (1 a.e. = 149 600 000 км.). Команда выполняется в виде: /planet Mars 1981'
+    text = 'Привет, ты можешь набрать команду состоящую из названия планеты и через пробел  год в котором ты хочешь получить расстояние между Землёй и заданным небесным телом. Названия планет: Mars, Jupiter, Saturn, Venus, Mercury, Uranus, Moon. Расстояние указывается в астрономических единицах (1 a.e. = 149 600 000 км.). Команда выполняется в виде: /planet Mars 1981. По команде /calc доступны арифметические действия над двумя числами. Пример команды /calc 25 + 35'
     print(text)
     logging.info(text)
     update.message.reply_text(text)
@@ -51,35 +51,66 @@ def talk_to_me(bot, update):
 
 
 def planet(bot, update):
-    user_text2 = update.message.text
-    user_text2 = user_text2.split()
-    planet1 = user_text2[1]
-    ear = (user_text2[2])
+    user_text = update.message.text
+    user_text = user_text.split()
+    planet1 = user_text[1]
+    ear = (user_text[2])
 
-    if planet1 == 'Mars':
+    if type(user_text[1]) != str:
+        update.message.reply_text('Планеты нужно писать буквами')
+    elif not user_text[2].isdigit():
+        update.message.reply_text('Год записывается цифрами')
+    elif 1 < len(user_text) < 3 or len(user_text) > 3:
+        update.message.reply_text('Введите команду правильно')
+    elif planet1 == 'Mars':
         distance = ephem.Mars(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Марсом было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Марсом было (будет): {} a.e.'.format(ear, distance)
     elif planet1 == 'Moon':
         distance = ephem.Moon(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Луной было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Луной было (будет): {} a.e.'.format(ear, distance)
     elif planet1 == 'Jupiter':
         distance = ephem.Jupiter(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Юпитером было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Юпитером было (будет): {} a.e.'.format(ear, distance)
     elif planet1 == 'Saturn':
         distance = ephem.Saturn(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Сатурном было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Сатурном было (будет): {} a.e.'.format(ear, distance)
     elif planet1 == 'Venus':
         distance = ephem.Venus(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Венерой было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Венерой было (будет): {} a.e.'.format(ear, distance)
     elif planet1 == 'Mercury':
         distance = ephem.Mercury(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Меркурием было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Меркурием было (будет): {} a.e.'.format(ear, distance)
     elif planet1 == 'Uranus':
         distance = ephem.Uranus(ear).earth_distance
-        user_text2 = 'В {} году расстояние между Землей и Ураном было (будет): {} a.e.'.format(ear, distance)
+        user_text = 'В {} году расстояние между Землей и Ураном было (будет): {} a.e.'.format(ear, distance)
     else:
         update.message.reply_text("Введите правильное название небесного тела")
-    update.message.reply_text(user_text2)
+    update.message.reply_text(user_text)
+
+def arithmetic(bot, update):
+    try:
+        user_text = update.message.text
+        user_text = user_text.split()
+        user_text[1] = float(user_text[1])
+        user_text[3] = float(user_text[3])
+        if type(user_text[1]) != float or type(user_text[3]) != float:
+            update.message.reply_text('Действия производятся только над цифрами')
+
+        elif 1 < len(user_text) < 4 or len(user_text) > 4:
+            update.message.reply_text('Введите команду правильно')
+        elif user_text[2] == '+':
+            update.message.reply_text(user_text[1] + user_text[3])
+        elif user_text[2] == '-':
+            update.message.reply_text(user_text[1] - user_text[3])
+        elif user_text[2] == '*':
+            update.message.reply_text(user_text[1] * user_text[3])
+        elif user_text[2] == '/':
+            update.message.reply_text(user_text[1] / user_text[3])
+        else:
+            update.message.reply_text('Что то пошло не так')
+    except ValueError:
+        update.message.reply_text('Действия производятся только над цифрами')
+
 
 def error(bot, update):
     logging.warning('Update "%s" caused error "%s"', bot, update.error)
@@ -92,8 +123,8 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', greet_user)) #Когда придет команда start выполнится функция
     dp.add_handler(CommandHandler('planet', planet)) #Когда придет команда start выполнится функция
+    dp.add_handler(CommandHandler('calc', arithmetic))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
-    #dp.add_handler(MessageHandler(Filters.text, planet))
     #dp.add_error_handler(error)
 
     updater.start_polling()
