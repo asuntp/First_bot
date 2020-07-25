@@ -24,7 +24,7 @@ def greet_user(bot, update):
     print(text)
     logging.info(text)
     update.message.reply_text(text)
-    #Простейший способ ответа пользователю
+    #Простейший способ ответа пользователюсв
 
 
 def talk_to_me(bot, update):
