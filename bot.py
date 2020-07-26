@@ -1,9 +1,12 @@
 
 # Импортируем обработчики
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from glob import glob
 import logging
-import settings
+from random import choice, randint
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import ephem
+import settings
+from glob import glob
 
 # Добавляем логгирование
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
@@ -24,7 +27,7 @@ def greet_user(bot, update):
     print(text)
     logging.info(text)
     update.message.reply_text(text)
-    #Простейший способ ответа пользователюсв
+    #Простейший способ ответа пользователю
 
 
 def talk_to_me(bot, update):
@@ -32,28 +35,10 @@ def talk_to_me(bot, update):
     text = 'Привет {}, ты написал {}.'.format(update.message.chat.username, update.message.text)
     update.message.reply_text(text)
     print(update.message)
-    # user_text = update.message.text
-    # user_text = user_text.split()
-    # update.message.reply_text(user_text)
-    # body = user_text[0]
-    # ear = abs(int(user_text[1]))
-    # planet_dict = {'Mars': 'Mars', 'Moon': 'Moon', 'Jupiter': 'Jupiter', 'Saturn': 'Saturn', 'Venus': 'Venus', 'Mercury': 'Mercury', 'Uranus': 'Uranus'}
-    #
-    # if body in planet_dict:
-    #     temp_body = planet_dict.get(body)
-    #     print(temp_body)
-    #     distance = ephem.planet_dict[body](ear).earth_distance
-    #     print(distance)
-    #     user_text1 = 'В {} году расстояние между Землей и {} было (будет): {}'.format(ear, planet, distance)
-    #     update.message.reply_text(user_text1)
-    # else:
-    #     update.message.reply_text("Введите правильное название небесного тела")
-
 
     logging.info("User: %s, Chat id: %s, Message: %s", update.message.chat.username,
-                 update.message.chat.id, update.message.text)
+                   update.message.chat.id, update.message.text)
     # эхобот ---отправляет пользователю тот текст который он написал
-    #update.message.reply_text(user_text1)
 
 
 def planet(bot, update):
@@ -119,6 +104,12 @@ def arithmetic(bot, update):
     except ValueError:
         update.message.reply_text('Действия производятся только над цифрами')
 
+def rockets(bot, update, context):
+    rock_img_list = glob('images/rocket*.jp*g')
+    rock_img_filename = choice(rock_img_list)
+    chat_id =update.effective_chat.id
+    context.bot.send_photo(chat_id=chat_id, photo=open(rock_img_filename, "rb"))
+
 
 def error(bot, update):
     logging.warning('Update "%s" caused error "%s"', bot, update.error)
@@ -130,8 +121,9 @@ def main():
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', greet_user)) #Когда придет команда start выполнится функция
-    dp.add_handler(CommandHandler('planet', planet)) #Когда придет команда start выполнится функция
+    dp.add_handler(CommandHandler('planet', planet))
     dp.add_handler(CommandHandler('calc', arithmetic))
+    dp.add_handler(CommandHandler('rocket', rockets))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     #dp.add_error_handler(error)
 
