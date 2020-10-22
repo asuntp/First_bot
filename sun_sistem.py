@@ -1,6 +1,7 @@
 import ephem
 
 def planet(bot, update):
+
     try:
         user_text = update.message.text
         user_text = user_text.split()
@@ -36,5 +37,6 @@ def planet(bot, update):
         else:
             update.message.reply_text("Введите правильное название небесного тела")
         update.message.reply_text(user_text)
+
     except TypeError:
         update.message.reply_text("По команде /start вызываются правильные примеры команд")
