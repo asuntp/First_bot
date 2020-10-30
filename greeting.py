@@ -1,4 +1,5 @@
 import logging
+from keyboard import main_keyboard
 
 # Функция greet_user будет вызаваться, когда пользователь напишет /start или подключится к боту в первый раз
 #Параметря принято называть bot & update (должно быть как минимум 2 параметра)
@@ -13,4 +14,4 @@ def greet_user(bot, update):
       '''
     print(text)
     logging.info(text)
-    update.message.reply_text(text)
+    update.message.reply_text(text, reply_markup=main_keyboard())

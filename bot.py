@@ -3,9 +3,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import settings
 from calc import arithmetic
 from sun_sistem import planet
-from pikture import rockets
+from picture import rockets
 from greeting import greet_user
 from eho import talk_to_me
+from now_distance import now
 #from errors import error
 
 # Добавляем логгирование
@@ -21,8 +22,10 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', greet_user)) #Когда придет команда /start выполнится функция
     dp.add_handler(CommandHandler('planet', planet))
+    dp.add_handler(CommandHandler('now', now))
     dp.add_handler(CommandHandler('calc', arithmetic))
     dp.add_handler(CommandHandler('rocket', rockets))
+    dp.add_handler(MessageHandler(Filters.regex('^(Команды)$'), greet_user))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     #dp.add_error_handler(error)
 

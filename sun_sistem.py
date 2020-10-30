@@ -13,25 +13,25 @@ def planet(bot, update):
             update.message.reply_text('Год записывается цифрами')
         elif 1 < len(user_text) < 3 or len(user_text) > 3:
             update.message.reply_text('Введите команду правильно')
-        elif planet == 'Mars':
+        elif planet == 'Mars' or 'mars':
             distance = int(ephem.Mars(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Марсом было (будет): {} k.m.'.format(ear, distance)
-        elif planet == 'Moon':
+        elif planet == 'Moon' or 'moon':
             distance = int(ephem.Moon(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Луной было (будет): {} k.m.'.format(ear, distance)
-        elif planet == 'Jupiter':
+        elif planet == 'Jupiter' or 'jupiter':
             distance = int(ephem.Jupiter(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Юпитером было (будет): {} k.m.'.format(ear, distance)
-        elif planet == 'Saturn':
+        elif planet == 'Saturn' or 'saturn':
             distance = int(ephem.Saturn(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Сатурном было (будет): {} k.m.'.format(ear, distance)
-        elif planet == 'Venus':
+        elif planet == 'Venus' or 'venus':
             distance = int(ephem.Venus(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Венерой было (будет): {} k.m.'.format(ear, distance)
-        elif planet == 'Mercury':
+        elif planet == 'Mercury' or 'Mercury':
             distance = int(ephem.Mercury(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Меркурием было (будет): {} k.m.'.format(ear, distance)
-        elif planet == 'Uranus':
+        elif planet == 'Uranus' or 'Uranus':
             distance = int(ephem.Uranus(ear).earth_distance) * 149597870
             user_text = 'В {} году расстояние между Землей и Ураном было (будет): {} k.m.'.format(ear, distance)
         else:
